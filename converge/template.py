@@ -39,6 +39,9 @@ class RsrcDef(object):
         return 'RsrcDef(%r, %r)' % (self.properties, self.depends_on)
 
     def dependency_names(self):
+        if not self.depends_on:
+            yield None
+
         for dep in self.depends_on:
             yield dep
 
