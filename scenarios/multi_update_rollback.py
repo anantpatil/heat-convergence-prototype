@@ -14,7 +14,7 @@ def check_h_not_replaced():
     test.assertIsNot(h_uuid, None)
 
 example_template0 = Template({
-    'H': RsrcDef({}, []),
+    'H': RsrcDef({'!h': 'initial'}, []),
     })
 engine.create_stack('foo', example_template0)
 engine.noop(1)
@@ -22,6 +22,7 @@ engine.call(verify, example_template0)
 engine.call(store_h_uuid)
 
 example_template = Template({
+    'H': RsrcDef({'!h': 'updated'}, []),
     'A': RsrcDef({}, []),
     'B': RsrcDef({}, []),
     'C': RsrcDef({'a': '4alpha'}, ['A', 'B']),
@@ -29,16 +30,7 @@ example_template = Template({
     'E': RsrcDef({'ca': GetAtt('C', 'a')}, []),
     })
 engine.update_stack('foo', example_template)
-engine.noop(3)
-
-example_template2 = Template({
-    'A': RsrcDef({}, []),
-    'C': RsrcDef({'a': '4alpha'}, ['A']),
-    'D': RsrcDef({'c': GetRes('C')}, []),
-    'E': RsrcDef({'ca': GetAtt('C', 'a')}, []),
-    })
-engine.update_stack('foo', example_template2)
-engine.noop(2)
+engine.noop(5)
 
 engine.rollback_stack('foo')
 engine.noop(10)
